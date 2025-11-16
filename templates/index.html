@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Sai Kalpataru Vidyalaya - Home{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="main-title">Welcome To Sai Kalpataru</h1>
+    
+    <div class="mission-statement">
+        <p>Sai Kalpataru Vidyalaya is a non-profit organization. It was formed in the year 2020, which began with teaching bhajans for young kids. Later, this evolved into a structured curriculum where shlokas from Vedic literature are taught throughout the academic year.</p>
+        
+        <p>The mission of this institution is to spread the word of Sanatana Dharma to the world and instill spiritual practice in young minds through recital of shlokas in Sanskrit language.</p>
+    </div>
+    
+    <!-- Program Information -->
+    <div class="card program-info mt-4">
+        <div class="card-header">
+            <h2 class="card-title text-center mb-2">Sai Kalpataru Vidyalaya</h2>
+            <p class="text-center mb-2"><strong>at Om Sri Sai Balaji Temple, Monroe, NJ</strong></p>
+            <h3 class="text-center mb-0">śloka & Sai Satcharitra Class</h3>
+        </div>
+        
+        <div class="card-body">
+            <div class="greeting text-center mb-3">
+                <h3 style="color: #B8927E; font-family: 'Limelight', cursive;">Jai Sairam!</h3>
+            </div>
+            
+            <p><strong>śravaṇaṃ</strong> is the beginner level śloka and Sai Satcharitra class. (Both new and the returning students are required to register using the LINK given in the last section of this document). If your child has already learned some śloka, we can evaluate for placement in the correct level.</p>
+            
+            <div class="program-details">
+                <div class="detail-item mb-3">
+                    <h4><strong>When:</strong></h4>
+                    <p>Aug '25 to June '26. Class duration is 45 minutes, meeting once a week, on Saturdays.</p>
+                </div>
+                
+                <div class="detail-item mb-3">
+                    <h4><strong>Where:</strong></h4>
+                    <p>Online Zoom Class (link will be provided upon registration).</p>
+                </div>
+                
+                <div class="detail-item mb-3">
+                    <h4><strong>Who:</strong></h4>
+                    <p>For kids aged 5 years or older.</p>
+                </div>
+                
+                <div class="detail-item mb-3">
+                    <h4><strong>Medium of Instruction:</strong></h4>
+                    <p>English.</p>
+                </div>
+                
+                <div class="detail-item mb-3">
+                    <h4><strong>How it Works:</strong></h4>
+                    <ul>
+                        <li>ślokas are based in Sanskrit language.</li>
+                        <li>Lyrics will be in English language.</li>
+                        <li>During the class, students will be made to repeat after the teacher.</li>
+                        <li>Audio recording and lyrics will be provided for practice.</li>
+                        <li>During the week, parents are required to work with kids to ensure they practice the previous week's lessons at home on a daily basis.</li>
+                        <li>Prior week lessons will be revised in the class before beginning a new lesson.</li>
+                        <li>Kids will listen to (from level 2, they will start reading) and discuss new stories from Shirdi Sai Satcharitra in the class.</li>
+                        <li>Assessments will be held at the end of the year. Additionally, a minimum of 80% attendance is required to move on to the next level.</li>
+                        <li>Students will get to recite in the temple for festivals, as schedule permits.</li>
+                    </ul>
+                </div>
+                
+                <div class="detail-item mb-3">
+                    <h4><strong>Year-end Graduation Ceremony:</strong></h4>
+                    <p>Conducted in the Om Sai Balaji Temple, Monroe, NJ. All graduates will receive a certificate from the temple founder. Winners will receive trophies and medals. Out of state graduates will get the certificates via regular mail.</p>
+                </div>
+                
+                <div class="detail-item mb-3">
+                    <h4><strong>Suggested Donation:</strong></h4>
+                    <p>As a contribution towards the Hanuman tower construction in the Om Sai Balaji Temple, Monroe NJ, we suggest a donation of $100 per child per year.</p>
+                    <p><em>Payment details will be given upon enrollment.</em></p>
+                </div>
+                
+                <div class="detail-item mb-3">
+                    <h4><strong>Registration Link:</strong></h4>
+                    <p><a href="https://docs.google.com/document/d/1AbtC_oGg_Pb-PXhpJiUUaS4N_sTWb83D/edit" target="_blank" class="btn btn-primary registration-link">Click Here to Register</a></p>
+                    <p><em><strong>Important:</strong> If you're registering more than one child, please submit the form again with the details of the second child (i.e. one form per child).</em></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        
+        
+       
+        
+        
+        
+        
+    
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Hide admin-only elements for non-admin users
+    if (!currentUser || !currentUser.is_admin) {
+        $('.admin-only').hide();
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Sai Kalpataru Vidyalaya{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1 class="main-title">Admin Dashboard</h1>
+    <p class="lead">Course and Student Management Portal</p>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div id="adminCoursesList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading courses...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <div id="studentsList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading students...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-2">
+        <div class="card">
+            <div class="card-header">
+                <h3>Quick Actions</h3>
+            </div>
+            <div class="p-3">
+                <a href="/" class="btn btn-secondary">Back to Home</a>
+                <button class="btn btn-primary logout-btn">Logout</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-2">
+        <div class="card">
+            <div class="card-header">
+                <h3>Admin Tools</h3>
+            </div>
+            <div class="p-3">
+                <p><strong>Available Courses:</strong></p>
+                <ul class="text-sm">
+                    <li>śravaṇaṃ</li>
+                    <li>Kirtanam</li>
+                    <li>Smaranam</li>
+                    <li>Pada Sevanam</li>
+                    <li>Archanam</li>
+                    <li>Vandanam</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <div class="alert alert-info">
+        <strong>Admin Instructions:</strong>
+        <ul class="mt-2 mb-0">
+            <li>Click "Assign Course" next to any student to assign them to a course</li>
+            <li>Click "View Stats" to see detailed time tracking for any student</li>
+            <li>Use course management to upload materials for each course</li>
+            <li>Monitor student progress through the statistics panels</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Check if user is logged in and is admin
+    if (!authToken) {
+        window.location.href = '/login';
+        return;
+    }
+    
+    if (!currentUser || !currentUser.is_admin) {
+        window.location.href = '/dashboard';
+        return;
+    }
+});
+</script>
+{% endblock %}

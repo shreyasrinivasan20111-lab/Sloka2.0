@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard - Sai Kalpataru Vidyalaya{% endblock %}
+
+{% block content %}
+<div class="text-center mb-4">
+    <h1 class="main-title">Student Dashboard</h1>
+    <p class="lead">Welcome to your learning portal</p>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h2>My Courses</h2>
+            </div>
+            <div id="coursesList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading your courses...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h3>My Progress</h3>
+            </div>
+            <div id="timeStats">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading your statistics...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h3>Quick Actions</h3>
+            </div>
+            <div class="p-3">
+                <a href="/" class="btn btn-secondary">Back to Home</a>
+                <button class="btn btn-primary logout-btn">Logout</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <div class="alert alert-info">
+        <strong>Note:</strong> If you don't see any courses, please contact your administrator to have courses assigned to your account.
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Check if user is logged in
+    if (!authToken) {
+        window.location.href = '/login';
+        return;
+    }
+    
+    // Check if user is not admin (students only)
+    if (currentUser && currentUser.is_admin) {
+        window.location.href = '/admin';
+        return;
+    }
+});
+</script>
+{% endblock %}

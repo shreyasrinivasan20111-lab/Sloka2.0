@@ -1,0 +1,1029 @@
+@import url('https://fonts.googleapis.com/css2?family=Limelight&family=Nova+Round&display=swap');
+
+:root {
+    --primary-color: #C5A098;
+    --primary-dark: #B8927E;
+    --text-color: #704f3b;
+    --background-light: #F5F1EF;
+    --error-color: #D32F2F;
+    --success-color: #2E7D32;
+    --border-color: #E0D6D1;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Nova Round', cursive;
+    color: var(--text-color);
+    background: linear-gradient(90deg, 
+        var(--primary-color) 0%, var(--primary-color) 15%,
+        var(--primary-dark) 15%, var(--primary-dark) 30%,
+        var(--primary-color) 30%, var(--primary-color) 45%,
+        var(--primary-dark) 45%, var(--primary-dark) 60%,
+        var(--primary-color) 60%, var(--primary-color) 75%,
+        var(--primary-dark) 75%, var(--primary-dark) 90%,
+        var(--primary-color) 90%, var(--primary-color) 100%
+    );
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(112, 79, 59, 0.1);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Limelight', cursive;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.main-title {
+    font-family: 'Limelight', cursive;
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(112, 79, 59, 0.3);
+}
+
+.mission-statement {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 20px;
+    background: rgba(197, 160, 152, 0.1);
+    border-radius: 10px;
+    border: 2px solid var(--primary-color);
+}
+
+/* Navigation */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 2px solid var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.hamburger-menu {
+    position: relative;
+}
+
+.hamburger-btn {
+    background: var(--primary-color);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    transition: background-color 0.3s;
+}
+
+.hamburger-btn:hover {
+    background: var(--primary-dark);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    min-width: 150px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 1000;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.dropdown-menu a:last-child {
+    border-bottom: none;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Buttons */
+.btn {
+    background: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: 'Nova Round', cursive;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn-primary {
+    background: var(--primary-color);
+}
+
+.btn-secondary {
+    background: var(--primary-dark);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--error-color);
+    color: white;
+}
+
+.btn-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+/* Forms */
+.form-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(112, 79, 59, 0.1);
+    border: 2px solid var(--primary-color);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Nova Round', cursive;
+    font-size: 1rem;
+    color: var(--text-color);
+    background: white;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(197, 160, 152, 0.2);
+}
+
+/* Cards */
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 4px 8px rgba(112, 79, 59, 0.1);
+    border: 2px solid var(--primary-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(112, 79, 59, 0.2);
+}
+
+.card-header {
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-family: 'Limelight', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Course management styles */
+.course-tag {
+    background: var(--primary-color);
+    color: var(--text-color);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin: 2px;
+    display: inline-block;
+}
+
+.time-badge {
+    background: var(--success-color);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.stats-card {
+    border: 2px solid var(--primary-color);
+    transition: transform 0.3s;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+}
+
+.progress-bar {
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.checkbox-label:hover {
+    background: rgba(197, 160, 152, 0.1);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+}
+
+.assigned-courses {
+    max-width: 200px;
+}
+
+/* Navigation */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 2px solid var(--primary-color);
+    margin-bottom: 2rem;
+}
+
+.hamburger-menu {
+    position: relative;
+}
+
+.hamburger-btn {
+    background: var(--primary-color);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    transition: background-color 0.3s;
+}
+
+.hamburger-btn:hover {
+    background: var(--primary-dark);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    min-width: 150px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 1000;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.dropdown-menu a:last-child {
+    border-bottom: none;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Buttons */
+.btn {
+    background: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: 'Nova Round', cursive;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn-primary {
+    background: var(--primary-color);
+}
+
+.btn-secondary {
+    background: var(--primary-dark);
+    color: white;
+}
+
+.btn-danger {
+    background: var(--error-color);
+    color: white;
+}
+
+.btn-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+/* Forms */
+.form-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(112, 79, 59, 0.1);
+    border: 2px solid var(--primary-color);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Nova Round', cursive;
+    font-size: 1rem;
+    color: var(--text-color);
+    background: white;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(197, 160, 152, 0.2);
+}
+
+/* Cards */
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 4px 8px rgba(112, 79, 59, 0.1);
+    border: 2px solid var(--primary-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(112, 79, 59, 0.2);
+}
+
+.card-header {
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-family: 'Limelight', cursive;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Grid system */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+}
+
+.col {
+    flex: 1;
+    padding: 0 10px;
+}
+
+.col-2 {
+    flex: 0 0 50%;
+    padding: 0 10px;
+}
+
+.col-3 {
+    flex: 0 0 33.333%;
+    padding: 0 10px;
+}
+
+.col-4 {
+    flex: 0 0 25%;
+    padding: 0 10px;
+}
+
+/* Tables */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(112, 79, 59, 0.1);
+}
+
+.table th,
+.table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table th {
+    background: var(--primary-color);
+    color: var(--text-color);
+    font-weight: bold;
+    font-family: 'Limelight', cursive;
+}
+
+.table tr:hover {
+    background: rgba(197, 160, 152, 0.1);
+}
+
+/* Timer */
+.timer-container {
+    background: white;
+    border: 3px solid var(--primary-color);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    margin: 2rem 0;
+    box-shadow: 0 8px 16px rgba(112, 79, 59, 0.1);
+}
+
+.timer-display {
+    font-family: 'Limelight', cursive;
+    font-size: 3rem;
+    color: var(--text-color);
+    margin: 1rem 0;
+    text-shadow: 2px 2px 4px rgba(112, 79, 59, 0.2);
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Messages */
+.alert {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border: 2px solid;
+    font-weight: bold;
+}
+
+.alert-success {
+    background: rgba(46, 125, 50, 0.1);
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+.alert-error {
+    background: rgba(211, 47, 47, 0.1);
+    border-color: var(--error-color);
+    color: var(--error-color);
+}
+
+.alert-info {
+    background: rgba(197, 160, 152, 0.1);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+}
+
+/* Loading */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: var(--text-color);
+}
+
+.spinner {
+    border: 4px solid var(--border-color);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* File upload */
+.file-upload {
+    border: 2px dashed var(--primary-color);
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.file-upload:hover {
+    background: rgba(197, 160, 152, 0.1);
+}
+
+.file-upload input[type="file"] {
+    display: none;
+}
+
+/* Course materials */
+.materials-section {
+    margin: 2rem 0;
+}
+
+.materials-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.material-type {
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+}
+
+.material-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 1rem;
+}
+
+.material-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.material-item:last-child {
+    border-bottom: none;
+}
+
+/* Enhanced admin table styles */
+.table th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Modal enhancements */
+.modal-overlay {
+    backdrop-filter: blur(2px);
+}
+
+.modal-overlay .card {
+    box-shadow: 0 10px 30px rgba(112, 79, 59, 0.3);
+    border: 3px solid var(--primary-color);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .main-title {
+        font-size: 2rem;
+    }
+    
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .row {
+        flex-direction: column;
+    }
+    
+    .col, .col-2, .col-3, .col-4 {
+        flex: 1;
+        padding: 5px 0;
+    }
+    
+    .materials-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .timer-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .timer-display {
+        font-size: 2rem;
+    }
+    
+    .auth-buttons {
+        justify-content: center;
+    }
+    
+    .table-responsive {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-container {
+        margin: 1rem 10px;
+        padding: 1rem;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .timer-display {
+        font-size: 1.5rem;
+    }
+    
+    .assigned-courses {
+        max-width: 150px;
+    }
+    
+    .course-tag {
+        font-size: 0.7rem;
+        padding: 2px 6px;
+    }
+    
+    .time-badge {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+    }
+}
+
+/* Hidden elements */
+.hidden {
+    display: none !important;
+}
+
+/* Utilities */
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.p-1 { padding: 0.5rem; }
+.p-2 { padding: 1rem; }
+.p-3 { padding: 1.5rem; }
+.p-4 { padding: 2rem; }
+
+/* Course management styles */
+.course-tag {
+    background: var(--primary-color);
+    color: var(--text-color);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin: 2px;
+    display: inline-block;
+}
+
+.time-badge {
+    background: var(--success-color);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.stats-card {
+    border: 2px solid var(--primary-color);
+    transition: transform 0.3s;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+}
+
+.progress-bar {
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.checkbox-label:hover {
+    background: rgba(197, 160, 152, 0.1);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-color);
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+/* Remove student modal styles */
+.alert-warning {
+    background: rgba(255, 193, 7, 0.1);
+    border-color: #ffc107;
+    color: #856404;
+}
+
+.confirm-remove-btn {
+    background: var(--error-color) !important;
+    border-color: var(--error-color) !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.confirm-remove-btn:hover {
+    background: #b71c1c !important;
+    border-color: #b71c1c !important;
+    transform: none;
+}
+
+.ml-2 {
+    margin-left: 0.5rem;
+}
+
+/* Action buttons spacing */
+.btn-sm + .btn-sm {
+    margin-left: 5px;
+}
+
+/* Warning modal styling */
+.modal-overlay .alert-error {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+/* Program information styles */
+.program-info {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.program-info .card-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    color: var(--text-color);
+    text-align: center;
+    padding: 2rem;
+    border-radius: 15px 15px 0 0;
+}
+
+.program-info .card-header h2,
+.program-info .card-header h3 {
+    margin-bottom: 0.5rem;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.program-info .card-body {
+    padding: 2rem;
+}
+
+.detail-item h4 {
+    color: var(--primary-dark);
+    font-family: 'Limelight', cursive;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.25rem;
+    display: inline-block;
+}
+
+.detail-item ul {
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.detail-item li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+}
+
+.greeting h3 {
+    font-size: 2rem;
+    text-shadow: 2px 2px 4px rgba(184, 146, 126, 0.3);
+}
+
+/* Registration link styling */
+.registration-link {
+    font-size: 1.1rem !important;
+    padding: 15px 30px !important;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
+    color: var(--text-color) !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(197, 160, 152, 0.3) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+    transition: all 0.3s ease !important;
+}
+
+.registration-link:hover {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color)) !important;
+    color: var(--text-color) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(197, 160, 152, 0.4) !important;
+}
+
+.registration-link:active {
+    transform: translateY(-1px) !important;
+}
+
+/* Loading overlay styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Responsive adjustments for program info */
+@media (max-width: 768px) {
+    .program-info .card-header {
+        padding: 1.5rem 1rem;
+    }
+    
+    .program-info .card-body {
+        padding: 1.5rem 1rem;
+    }
+    
+    .greeting h3 {
+        font-size: 1.5rem;
+    }
+    
+    .detail-item h4 {
+        font-size: 1rem;
+    }
+    
+    .registration-link {
+        font-size: 1rem !important;
+        padding: 12px 24px !important;
+    }
+}

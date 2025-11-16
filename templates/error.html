@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Error - Sai Kalpataru Vidyalaya{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="main-title">Oops! Something went wrong</h1>
+    
+    <div class="card mt-4">
+        <div class="card-header">
+            <h2>Error Details</h2>
+        </div>
+        <div class="p-4">
+            <div class="alert alert-error">
+                <h4>An unexpected error occurred</h4>
+                <p id="error-message">We're sorry, but something went wrong while processing your request.</p>
+            </div>
+            
+            <div class="mt-4">
+                <h4>What you can do:</h4>
+                <ul class="text-left" style="max-width: 500px; margin: 0 auto;">
+                    <li>Try refreshing the page</li>
+                    <li>Go back to the previous page</li>
+                    <li>Return to the home page</li>
+                    <li>If the problem persists, please contact support</li>
+                </ul>
+            </div>
+            
+            <div class="mt-4">
+                <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+                <a href="/" class="btn btn-primary">Home Page</a>
+                <button onclick="location.reload()" class="btn btn-success">Refresh Page</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3>Need Help?</h3>
+        </div>   
+        <div class="p-3">
+            <p>If you continue to experience issues, please note the following information and contact support:</p>
+            <div class="text-left" style="max-width: 600px; margin: 0 auto;">
+                <p><strong>Time:</strong> <span id="error-time"></span></p>
+                <p><strong>Page:</strong> <span id="error-page"></span></p>
+                <p><strong>User Agent:</strong> <span id="error-user-agent"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    // Get error details from URL parameters or localStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorMessage = urlParams.get('message') || localStorage.getItem('lastError') || 'An unknown error occurred';
+    
+    // Display error information
+    $('#error-message').text(errorMessage);
+    $('#error-time').text(new Date().toLocaleString());
+    $('#error-page').text(document.referrer || window.location.pathname);
+    $('#error-user-agent').text(navigator.userAgent);
+    
+    // Clear stored error
+    localStorage.removeItem('lastError');
+    
+    // Log error for debugging
+    console.error('Error page displayed:', {
+        message: errorMessage,
+        time: new Date().toISOString(),
+        page: window.location.pathname,
+        referrer: document.referrer,
+        userAgent: navigator.userAgent
+    });
+});
+
+// Global error handler to redirect to error page
+window.addEventListener('error', function(e) {
+    console.error('Global error caught:', e.error);
+    localStorage.setItem('lastError', e.error.message || 'An unexpected JavaScript error occurred');
+    
+    // Don't redirect if already on error page
+    if (!window.location.pathname.includes('/error')) {
+        window.location.href = '/error?message=' + encodeURIComponent(e.error.message || 'An unexpected error occurred');
+    }
+});
+
+// Handle unhandled promise rejections
+window.addEventListener('unhandledrejection', function(e) {
+    console.error('Unhandled promise rejection:', e.reason);
+    localStorage.setItem('lastError', e.reason.message || 'An unhandled promise rejection occurred');
+    
+    // Don't redirect if already on error page
+    if (!window.location.pathname.includes('/error')) {
+        window.location.href = '/error?message=' + encodeURIComponent(e.reason.message || 'An unexpected error occurred');
+    }
+});
+</script>
+{% endblock %}

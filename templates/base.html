@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sai Kalpataru Vidyalaya{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="hamburger-menu">
+                <button class="hamburger-btn">☰ Menu</button>
+                <div class="dropdown-menu">
+                    <a href="#winners">Winners</a>
+                    <a href="#sai-sacharitra">Sai Sacharitra</a>
+                </div>
+            </div>
+            
+            <div class="auth-buttons">
+                <a href="/login" class="btn btn-primary">Log In</a>
+                <a href="/signup" class="btn btn-secondary">Sign Up</a>
+            </div>
+        </header>
+        
+        <div id="alerts"></div>
+        
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', path='/js/app.js') }}?v=2024111603"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
