@@ -20,7 +20,12 @@ import secrets
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    init_db()
+    try:
+        init_db()
+        print("Database initialized successfully")
+    except Exception as e:
+        print(f"Database initialization error: {e}")
+        # Continue anyway - database will be initialized on first request
     yield
     # Shutdown
     pass
@@ -32,15 +37,36 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 # Security
-SECRET_KEY = "sai-kalpataru-secret-key-2024"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+SECRET_KEY = os.getenv("SECRET_KEY", "sai-kalpataru-secret-key-2024")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
 security = HTTPBearer()
 
+# Global database connection
+db_conn = None
+
+# Helper function to get database connection
+def get_db():
+    global db_conn
+    if db_conn is None:
+        init_db()
+    return db_conn
+
 # Database initialization
 def init_db():
-    conn = duckdb.connect("students.db")
+    global db_conn
+    # Use in-memory database for serverless environments
+    # In production, you'd use a proper database service
+    try:
+        # Try to use a temporary file first
+        db_path = "/tmp/students.db" if os.path.exists("/tmp") else ":memory:"
+        db_conn = duckdb.connect(db_path)
+        conn = db_conn
+    except Exception as e:
+        # Fallback to in-memory database
+        db_conn = duckdb.connect(":memory:")
+        conn = db_conn
     
     # Users table
     conn.execute("""
@@ -125,7 +151,6 @@ def init_db():
         VALUES (?, ?, ?, ?, ?, ?)
     """, (2, "Jaya", "B", "jayab2021@gmail.com", admin_hash2, True))
     
-    conn.close()
 
 # Models
 class UserCreate(BaseModel):
@@ -187,13 +212,12 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
     except JWTError:
         raise credentials_exception
     
-    conn = duckdb.connect("students.db")
+    conn = get_db()
     user = conn.execute("""
         SELECT id, first_name, last_name, email, password_hash, is_admin 
         FROM users 
         WHERE email = ?
     """, (email,)).fetchone()
-    conn.close()
     
     if user is None:
         raise credentials_exception
@@ -233,7 +257,7 @@ async def error_page(request: Request):
 @app.post("/api/register")
 async def register(user: UserCreate):
     try:
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         
         # Check if user already exists
         existing_user = conn.execute("""
@@ -242,7 +266,6 @@ async def register(user: UserCreate):
             WHERE email = ?
         """, (user.email,)).fetchone()
         if existing_user:
-            conn.close()
             raise HTTPException(status_code=400, detail="Email already registered")
         
         # Create new user
@@ -255,7 +278,6 @@ async def register(user: UserCreate):
             VALUES (?, ?, ?, ?, ?, ?)
         """, (next_id, user.first_name, user.last_name, user.email, password_hash, False))
         
-        conn.close()
         return {"message": "User registered successfully"}
     except Exception as e:
         return JSONResponse(status_code=500, content={"detail": str(e)})
@@ -263,13 +285,12 @@ async def register(user: UserCreate):
 @app.post("/api/login")
 async def login(user: UserLogin):
     try:
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         db_user = conn.execute("""
             SELECT id, first_name, last_name, email, password_hash, is_admin 
             FROM users 
             WHERE email = ?
         """, (user.email,)).fetchone()
-        conn.close()
         
         if not db_user or not verify_password(user.password, db_user[4]):
             raise HTTPException(status_code=401, detail="Invalid credentials")
@@ -296,7 +317,7 @@ async def login(user: UserLogin):
 @app.get("/api/courses")
 async def get_courses(current_user: tuple = Depends(get_current_user)):
     try:
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         
         if current_user[5]:  # is_admin
             courses = conn.execute("SELECT * FROM courses ORDER BY name").fetchall()
@@ -309,7 +330,6 @@ async def get_courses(current_user: tuple = Depends(get_current_user)):
                 ORDER BY c.name
             """, (current_user[0],)).fetchall()
         
-        conn.close()
         
         course_list = []
         for course in courses:
@@ -330,7 +350,7 @@ async def get_students(current_user: tuple = Depends(get_current_user)):
         if not current_user[5]:  # Not admin
             raise HTTPException(status_code=403, detail="Admin access required")
         
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         # First get all students
         students_basic = conn.execute("""
             SELECT id, first_name, last_name, email
@@ -370,7 +390,6 @@ async def get_students(current_user: tuple = Depends(get_current_user)):
                 "total_practice_time": total_time or 0
             })
         
-        conn.close()
         return student_list
 
     except Exception as e:
@@ -382,7 +401,7 @@ async def assign_course(student_id: int = Form(...), course_id: int = Form(...),
         if not current_user[5]:  # Not admin
             raise HTTPException(status_code=403, detail="Admin access required")
         
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         
         # Check if assignment already exists
         existing = conn.execute("""
@@ -397,7 +416,6 @@ async def assign_course(student_id: int = Form(...), course_id: int = Form(...),
                 INSERT INTO student_courses (id, student_id, course_id) VALUES (?, ?, ?)
             """, (next_id, student_id, course_id))
         
-        conn.close()
         return {"message": "Course assigned successfully"}
     except Exception as e:
         return JSONResponse(status_code=500, content={"detail": str(e)})
@@ -405,7 +423,7 @@ async def assign_course(student_id: int = Form(...), course_id: int = Form(...),
 @app.post("/api/time-tracking")
 async def save_time_entry(time_entry: TimeEntry, current_user: tuple = Depends(get_current_user)):
     try:
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         
         # Get next ID
         max_id = conn.execute("SELECT COALESCE(MAX(id), 0) FROM time_tracking").fetchone()[0]
@@ -416,7 +434,6 @@ async def save_time_entry(time_entry: TimeEntry, current_user: tuple = Depends(g
         """, (next_id, current_user[0], time_entry.course_id, time_entry.start_time, 
               time_entry.end_time, time_entry.duration))
         
-        conn.close()
         return {"message": "Time entry saved successfully"}
     except Exception as e:
         return JSONResponse(status_code=500, content={"detail": str(e)})
@@ -427,7 +444,7 @@ async def get_time_stats(student_id: int, current_user: tuple = Depends(get_curr
         if not current_user[5] and current_user[0] != student_id:  # Not admin and not own stats
             raise HTTPException(status_code=403, detail="Access denied")
         
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         stats = conn.execute("""
             SELECT c.name, SUM(tt.duration) as total_time, COUNT(tt.id) as sessions
             FROM time_tracking tt
@@ -436,7 +453,6 @@ async def get_time_stats(student_id: int, current_user: tuple = Depends(get_curr
             GROUP BY c.id, c.name
             ORDER BY total_time DESC
         """, (student_id,)).fetchall()
-        conn.close()
         
         stats_list = []
         for stat in stats:
@@ -463,7 +479,7 @@ async def upload_material(
         
         content = await file.read()
         
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         # Get next ID
         max_id = conn.execute("SELECT COALESCE(MAX(id), 0) FROM course_materials").fetchone()[0]
         next_id = max_id + 1
@@ -471,7 +487,6 @@ async def upload_material(
             INSERT INTO course_materials (id, course_id, material_type, filename, content)
             VALUES (?, ?, ?, ?, ?)
         """, (next_id, course_id, material_type, file.filename, content))
-        conn.close()
         
         return {"message": "Material uploaded successfully"}
     except Exception as e:
@@ -480,14 +495,13 @@ async def upload_material(
 @app.get("/api/course-materials/{course_id}")
 async def get_course_materials(course_id: int, current_user: tuple = Depends(get_current_user)):
     try:
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         materials = conn.execute("""
             SELECT id, material_type, filename, uploaded_at
             FROM course_materials
             WHERE course_id = ?
             ORDER BY material_type, uploaded_at DESC
         """, (course_id,)).fetchall()
-        conn.close()
         
         material_list = []
         for material in materials:
@@ -505,11 +519,10 @@ async def get_course_materials(course_id: int, current_user: tuple = Depends(get
 @app.get("/api/download-material/{material_id}")
 async def download_material(material_id: int, current_user: tuple = Depends(get_current_user)):
     try:
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         material = conn.execute("""
             SELECT filename, content FROM course_materials WHERE id = ?
         """, (material_id,)).fetchone()
-        conn.close()
         
         if not material:
             raise HTTPException(status_code=404, detail="Material not found")
@@ -527,7 +540,7 @@ async def get_student_assignments(student_id: int, current_user: tuple = Depends
         if not current_user[5]:  # Not admin
             raise HTTPException(status_code=403, detail="Admin access required")
         
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         assignments = conn.execute("""
             SELECT sc.course_id, c.name
             FROM student_courses sc
@@ -535,7 +548,6 @@ async def get_student_assignments(student_id: int, current_user: tuple = Depends
             WHERE sc.student_id = ?
             ORDER BY c.name
         """, (student_id,)).fetchall()
-        conn.close()
         
         assignment_list = []
         for assignment in assignments:
@@ -562,7 +574,7 @@ async def update_student_courses(
         import json
         selected_course_ids = json.loads(course_ids)
         
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         
         # Remove all existing assignments for this student
         conn.execute("DELETE FROM student_courses WHERE student_id = ?", (student_id,))
@@ -576,7 +588,6 @@ async def update_student_courses(
                 INSERT INTO student_courses (id, student_id, course_id) VALUES (?, ?, ?)
             """, (next_id, student_id, course_id))
         
-        conn.close()
         return {"message": f"Course assignments updated successfully. {len(selected_course_ids)} courses assigned."}
     except Exception as e:
         return JSONResponse(status_code=500, content={"detail": str(e)})
@@ -591,7 +602,7 @@ async def remove_student(request: RemoveStudentRequest, current_user: tuple = De
             raise HTTPException(status_code=403, detail="Admin access required")
         
         student_id = request.student_id
-        conn = duckdb.connect("students.db")
+        conn = get_db()
         
         # Check if student exists and is not an admin
         student = conn.execute("""
@@ -600,7 +611,6 @@ async def remove_student(request: RemoveStudentRequest, current_user: tuple = De
             WHERE id = ? AND is_admin = FALSE
         """, (student_id,)).fetchone()
         if not student:
-            conn.close()
             raise HTTPException(status_code=404, detail="Student not found or cannot remove admin users")
         
         # Remove all related data in correct order (due to foreign key constraints)
@@ -616,7 +626,6 @@ async def remove_student(request: RemoveStudentRequest, current_user: tuple = De
         # 4. Remove the user account
         conn.execute("DELETE FROM users WHERE id = ?", (student_id,))
         
-        conn.close()
         
         return {"message": "Student and all associated data removed successfully"}
     except HTTPException:
@@ -624,6 +633,9 @@ async def remove_student(request: RemoveStudentRequest, current_user: tuple = De
         raise
     except Exception as e:
         return JSONResponse(status_code=500, content={"detail": str(e)})
+
+# Vercel handler
+handler = app
 
 if __name__ == "__main__":
     import uvicorn
