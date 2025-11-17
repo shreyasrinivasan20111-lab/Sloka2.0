@@ -15,17 +15,24 @@ import base64
 import hashlib
 import secrets
 
-# Skip lifespan for serverless - initialize on demand
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    try:
+        init_db()
+        print("Database initialized successfully")
+    except Exception as e:
+        print(f"Database initialization error: {e}")
+        # Continue anyway - database will be initialized on first request
+    yield
+    # Shutdown
+    pass
 
-# Mount static files with error handling
-try:
-    if os.path.exists("static"):
-        app.mount("/static", StaticFiles(directory="static"), name="static")
-    templates = Jinja2Templates(directory="templates") if os.path.exists("templates") else None
-except Exception as e:
-    print(f"Static files mounting error: {e}")
-    templates = None
+app = FastAPI(lifespan=lifespan)
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 # Security
 SECRET_KEY = os.getenv("SECRET_KEY", "sai-kalpataru-secret-key-2024")
@@ -47,18 +54,17 @@ def get_db():
 # Database initialization
 def init_db():
     global db_conn
-    if db_conn is not None:
-        return db_conn
-        
     # Use in-memory database for serverless environments
+    # In production, you'd use a proper database service
     try:
-        # Always use in-memory for serverless to avoid file system issues
+        # Try to use a temporary file first
+        db_path = "/tmp/students.db" if os.path.exists("/tmp") else ":memory:"
+        db_conn = duckdb.connect(db_path)
+        conn = db_conn
+    except Exception as e:
+        # Fallback to in-memory database
         db_conn = duckdb.connect(":memory:")
         conn = db_conn
-        print("Database connected successfully (in-memory)")
-    except Exception as e:
-        print(f"Database connection failed: {e}")
-        raise
     
     # Users table
     conn.execute("""
@@ -217,35 +223,9 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
 
 # Routes
 
-@app.get("/health")
-async def health_check():
-    try:
-        # Test database connection
-        db = get_db()
-        return JSONResponse({
-            "status": "healthy",
-            "database": "connected",
-            "message": "Sai Kalpataru Vidyalaya System Online"
-        })
-    except Exception as e:
-        return JSONResponse({
-            "status": "unhealthy",
-            "error": str(e)
-        }, status_code=500)
-
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    try:
-        if templates and os.path.exists("templates/index.html"):
-            return templates.TemplateResponse("index.html", {"request": request})
-        else:
-            return JSONResponse({
-                "message": "Sai Kalpataru Vidyalaya - Student Course Management System",
-                "status": "online",
-                "note": "Use /health to check system status"
-            })
-    except Exception as e:
-        return JSONResponse({"error": str(e), "status": "error"}, status_code=500)
+    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
