@@ -1,0 +1,55 @@
+# Development files
+*.db
+*.sqlite
+*.sqlite3
+*.duckdb
+*.duckdb.wal
+.env.local
+.env.production
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+ADMIN_ENHANCEMENTS.md
+DEPLOYMENT_SUMMARY.txt
+PROJECT_SUMMARY.md
+STUDENT_REMOVAL_FEATURE.md
+VERCEL_DEPLOYMENT_VERIFICATION.md
+
+# Scripts
+*.sh
+dry-run.sh
+simple-dry-run.sh
+deploy.sh
+test.sh
